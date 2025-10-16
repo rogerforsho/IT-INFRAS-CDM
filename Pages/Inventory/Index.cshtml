@@ -1,0 +1,173 @@
+﻿@page
+@model CDM.InventorySystem.Pages.Inventory.IndexModel
+@{
+    ViewData["Title"] = "Inventory";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Inventory Management</h1>
+        <a class="btn btn-success" href="/Items/Add">
+            <i class="bi bi-plus-circle"></i> Add New Item
+        </a>
+    </div>
+
+    <!-- Search and Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <input type="text" class="form-control" placeholder="Search items..."
+                           id="searchInput" value="@Model.SearchTerm" />
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="Keyboard">Keyboard</option>
+                        <option value="Mouse">Mouse</option>
+                        <option value="Monitor">Monitor</option>
+                        <option value="Laptop">Laptop</option>
+                        <option value="Computer">Computer</option>
+                        <option value="Printer">Printer</option>
+                        <option value="Accessory">Accessory</option>
+                        <option value="Cable">Cable</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select class="form-select" id="sortSelect">
+                        <option value="name">Name A-Z</option>
+                        <option value="name_desc">Name Z-A</option>
+                        <option value="stock_asc">Stock Low-High</option>
+                        <option value="stock_desc">Stock High-Low</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-outline-primary w-100" onclick="applyFilters()">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inventory Table -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Barcode</th>
+                            <th>Item Name</th>
+                            <th>Category</th>
+                            <th>Brand/Model</th>
+                            <th>Stock</th>
+                            <th>Condition</th>
+                            <th>Location</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="badge bg-secondary">@item.BarcodeId</span>
+                                </td>
+                                <td>@item.ItemName</td>
+                                <td>@item.Category</td>
+                                <td>
+                                    <small>@item.Brand @item.Model</small>
+                                </td>
+                                <td>
+                                    @if (item.CurrentStock <= item.MinStockLevel)
+                                    {
+                                        <span class="badge bg-warning">@item.CurrentStock</span>
+                                    }
+                                    else if (item.CurrentStock == 0)
+                                    {
+                                        <span class="badge bg-danger">@item.CurrentStock</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">@item.CurrentStock</span>
+                                    }
+                                    <small class="text-muted">/ @item.MinStockLevel min</small>
+                                </td>
+                                <td>
+                                    <span class="badge @GetConditionBadge(item.Condition)">@item.Condition</span>
+                                </td>
+                                <td>@item.Location</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm">
+                                        <a class="btn btn-outline-primary" href="/Items/CheckOut?id=@item.ItemId">
+                                            Check Out
+                                        </a>
+                                        <a class="btn btn-outline-info" href="/Items/Edit?id=@item.ItemId">
+                                            Edit
+                                        </a>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <button class="btn btn-outline-danger"
+                                                    onclick="confirmDelete(@item.ItemId, '@item.ItemName')">
+                                                Delete
+                                            </button>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (!Model.Items.Any())
+            {
+                <div class="text-center py-4">
+                    <h4 class="text-muted">No items found</h4>
+                    <p class="text-muted">Try adjusting your search or add new items to the inventory.</p>
+                    <a class="btn btn-primary" href="/Items/Add">Add First Item</a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function applyFilters() {
+            const search = document.getElementById('searchInput').value;
+            const category = document.getElementById('categoryFilter').value;
+            const sort = document.getElementById('sortSelect').value;
+
+            let url = '/Inventory?';
+            if (search) url += `searchTerm=${encodeURIComponent(search)}&`;
+            if (category) url += `category=${encodeURIComponent(category)}&`;
+            if (sort) url += `sortBy=${sort}`;
+
+            window.location.href = url;
+        }
+
+        function confirmDelete(itemId, itemName) {
+            if (confirm(`Are you sure you want to delete "${itemName}"?`)) {
+                window.location.href = `/Items/Delete?id=${itemId}`;
+            }
+        }
+
+        // Set current filter values
+        document.getElementById('categoryFilter').value = '@Model.Category';
+        document.getElementById('sortSelect').value = '@Model.SortBy';
+    </script>
+}
+
+@functions {
+    public string GetConditionBadge(string condition)
+    {
+        return condition switch
+        {
+            "New" => "bg-success",
+            "Good" => "bg-primary",
+            "Fair" => "bg-warning",
+            "Poor" => "bg-danger",
+            _ => "bg-secondary"
+        };
+    }
+}

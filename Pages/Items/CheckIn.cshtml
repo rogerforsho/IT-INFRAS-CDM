@@ -1,0 +1,111 @@
+﻿@page
+@model CDM.InventorySystem.Pages.Items.CheckInModel
+@{
+    ViewData["Title"] = "Check In Item";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Check In Item</h4>
+                </div>
+                <div class="card-body">
+                    <!-- Active Checkouts Table -->
+                    <h5>Active Checkouts</h5>
+
+                    @if (Model.ActiveTransactions.Any())
+                    {
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Barcode</th>
+                                        <th>Item</th>
+                                        <th>Borrower</th>
+                                        <th>Check Out Date</th>
+                                        <th>Due Date</th>
+                                        <th>Quantity</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var transaction in Model.ActiveTransactions)
+                                    {
+                                        <tr class="@(transaction.IsOverdue ? "table-warning" : "")">
+                                            <td>
+                                                <span class="badge bg-secondary">@transaction.Item?.BarcodeId</span>
+                                            </td>
+                                            <td>@transaction.Item?.ItemName</td>
+                                            <td>@transaction.Borrower?.FullName</td>
+                                            <td>@transaction.TransactionDate.ToString("MMM dd, yyyy")</td>
+                                            <td>
+                                                @if (transaction.IsOverdue)
+                                                {
+                                                    <span class="text-danger fw-bold">@transaction.DueDate.ToString("MMM dd, yyyy")</span>
+                                                }
+                                                else
+                                                {
+                                                    @transaction.DueDate.ToString("MMM dd, yyyy")
+                                                }
+                                            </td>
+                                            <td>@transaction.Quantity</td>
+                                            <td>
+                                                @if (transaction.IsOverdue)
+                                                {
+                                                    <span class="badge bg-danger">Overdue</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-success">Active</span>
+                                                }
+                                            </td>
+                                            <td>
+                                                <form method="post" class="d-inline">
+                                                    <input type="hidden" name="transactionId" value="@transaction.TransactionId" />
+                                                    <button type="submit" class="btn btn-success btn-sm"
+                                                            onclick="return confirm('Check in @transaction.Item?.ItemName?')">
+                                                        Check In
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            <p class="mb-0">No active checkouts found.</p>
+                        </div>
+                    }
+
+                    <!-- Quick Check In by Barcode -->
+                    <hr />
+                    <h5>Quick Check In by Barcode</h5>
+                    <form method="post" asp-page-handler="ByBarcode" class="row g-3 align-items-end">
+                        <div class="col-md-8">
+                            <label for="barcode" class="form-label">Enter Barcode</label>
+                            <input type="text" class="form-control" id="barcode" name="barcode"
+                                   placeholder="Scan or enter barcode (e.g., CDM-KB-001)" required />
+                        </div>
+                        <div class="col-md-4">
+                            <button type="submit" class="btn btn-primary w-100">Check In by Barcode</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Focus on barcode input for quick scanning
+        document.getElementById('barcode')?.focus();
+    </script>
+}
