@@ -11,11 +11,12 @@
 using System;
 using System.Reflection;
 
+[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("aspnet-CDM.InventorySystem")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("CDM.InventorySystem")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+206030444e79e25da3ca2117fd1284e30961f872")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0fa36607f4e2a06883b6485f9865be942bb8afcf")]
 [assembly: System.Reflection.AssemblyProductAttribute("CDM.InventorySystem")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CDM.InventorySystem")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
