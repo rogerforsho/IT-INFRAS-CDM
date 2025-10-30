@@ -30,7 +30,7 @@ namespace CDM.InventorySystem.Pages.Items
             _context = context;
         }
 
-        public async Task<IActionResult> OnGetAsync(string id)
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
             {
@@ -60,12 +60,33 @@ namespace CDM.InventorySystem.Pages.Items
 
             try
             {
-                _context.Attach(Item).State = EntityState.Modified;
+                var existingItem = await _context.Items.FindAsync(Item.ItemId);
+                if (existingItem == null)
+                {
+                    return NotFound();
+                }
+
+                // Update only the properties that should be modified
+                existingItem.ItemName = Item.ItemName;
+                existingItem.Description = Item.Description;
+                existingItem.Category = Item.Category;
+                existingItem.Brand = Item.Brand;
+                existingItem.Model = Item.Model;
+                existingItem.Specification = Item.Specification;
+                existingItem.CurrentStock = Item.CurrentStock;
+                existingItem.TotalStock = Item.TotalStock;
+                existingItem.MinStockLevel = Item.MinStockLevel;
+                existingItem.Location = Item.Location;
+                existingItem.Condition = Item.Condition;
+                existingItem.Vendor = Item.Vendor;
+                existingItem.PurchaseDate = Item.PurchaseDate;
+                existingItem.PurchasePrice = Item.PurchasePrice;
+
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                var exists = await _context.Items.AnyAsync(e => e.BarcodeId == Item.BarcodeId);
+                var exists = await _context.Items.AnyAsync(e => e.ItemId == Item.ItemId);
                 if (!exists)
                 {
                     return NotFound();

@@ -1,5 +1,4 @@
-using System;
-using System.Threading.Tasks;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
@@ -38,6 +37,9 @@ namespace CDM.InventorySystem.Pages.Items
             {
                 return Page();
             }
+
+            // ✅ Fix: Automatically set CurrentStock equal to TotalStock when adding new item
+            Item.CurrentStock = Item.TotalStock;
 
             _context.Items.Add(Item);
             await _context.SaveChangesAsync();

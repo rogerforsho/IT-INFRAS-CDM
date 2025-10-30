@@ -1,7 +1,21 @@
 ﻿@page
+@using CDM.InventorySystem.Models
+@using CDM.InventorySystem.Data
+@using CDM.InventorySystem.Utilities
+@inject InventoryDbContext _context
 @model CDM.InventorySystem.Pages.Items.AddModel
 @{
     ViewData["Title"] = "Add New Item";
+
+    // Generate barcode on GET
+    string generatedBarcode = Guid.NewGuid().ToString("N");
+    string barcodeImage = BarcodeGenerator.GenerateBarcodeImage(generatedBarcode);
+
+    // Initialize item if null
+    if (Model.Item == null)
+    {
+        Model.Item = new Item { BarcodeId = generatedBarcode };
+    }
 }
 
 <div class="container-fluid px-4">
@@ -75,14 +89,12 @@
                 <div class="row mb-3">
                     <div class="col-md-6">
                         <div class="form-floating mb-3">
-                            <input asp-for="Item.BarcodeId" class="form-control" readonly value="@Model.GeneratedBarcode" />
+                            <input asp-for="Item.BarcodeId" class="form-control" readonly value="@generatedBarcode" />
                             <label asp-for="Item.BarcodeId">Barcode ID</label>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="text-center">
-                            <img src="@Model.BarcodeImage" alt="Barcode" class="img-fluid" />
-                        </div>
+                    <div class="col-md-6 text-center">
+                        <img src="@barcodeImage" alt="Barcode" class="img-fluid" />
                     </div>
                 </div>
 
@@ -97,5 +109,38 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+@functions {
+    public class AddModel
+    {
+        public Item Item { get; set; }
+    }
+
+    public async Task OnPostAsync()
+    {
+        var item = new Item
+        {
+            BarcodeId = Request.Form["Item.BarcodeId"],
+            ItemName = Request.Form["Item.ItemName"],
+            Description = Request.Form["Item.Description"],
+            Category = Request.Form["Item.Category"],
+            Location = Request.Form["Item.Location"],
+            TotalStock = int.Parse(Request.Form["Item.TotalStock"]),
+            MinStockLevel = int.Parse(Request.Form["Item.MinStockLevel"]),
+            PurchasePrice = decimal.Parse(Request.Form["Item.PurchasePrice"]),
+            Vendor = Request.Form["Item.Vendor"],
+            // ✅ Automatically set current stock equal to total stock
+            CurrentStock = int.Parse(Request.Form["Item.TotalStock"]),
+            DateAdded = DateTime.Now
+        };
+
+        _context.Items.Add(item);
+        await _context.SaveChangesAsync();
+
+        Response.Redirect("/Inventory/Index");
+    }
 }
