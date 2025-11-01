@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -9,8 +9,8 @@ namespace CDM.InventorySystem.Models
         [Key]
         public int Id { get; set; } // Primary key
         public int ItemId { get; set; } 
-        public string BorrowerId { get; set; }
-        public string UserId { get; set; }
+        public string BorrowerId { get; set; } = string.Empty;
+        public string UserId { get; set; } = string.Empty;
         public DateTime TransactionDate { get; set; }
         public DateTime DueDate { get; set; }
         public DateTime? ReturnDate { get; set; }
@@ -21,13 +21,13 @@ namespace CDM.InventorySystem.Models
 
         // Navigation properties
         [ForeignKey("ItemId")]
-        public virtual Item Item { get; set; }
+        public virtual Item Item { get; set; } = null!;
         
         [ForeignKey("BorrowerId")]
-        public virtual ApplicationUser Borrower { get; set; }
+        public virtual ApplicationUser Borrower { get; set; } = null!;
         
         [ForeignKey("UserId")]
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser User { get; set; } = null!;
 
         [NotMapped]
         public bool IsOverdue => Status == TransactionStatus.CheckedOut && DueDate < DateTime.Now;
