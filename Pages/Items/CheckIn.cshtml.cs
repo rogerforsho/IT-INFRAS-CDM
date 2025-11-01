@@ -42,8 +42,8 @@ namespace CDM.InventorySystem.Pages.Items
                 .Select(t => new TransactionViewModel
                 {
                     TransactionId = t.Id,
-                    Item = t.Item,
-                    Borrower = t.Borrower,
+                    Item = t.Item!,
+                    Borrower = t.Borrower!,
                     TransactionDate = t.TransactionDate,
                     DueDate = t.DueDate,
                     Quantity = t.Quantity,
@@ -86,8 +86,8 @@ namespace CDM.InventorySystem.Pages.Items
         public class TransactionViewModel
         {
             public int TransactionId { get; set; }
-            public Item Item { get; set; }
-            public ApplicationUser Borrower { get; set; }
+            public Item Item { get; set; } = null!;
+            public ApplicationUser Borrower { get; set; } = null!;
             public DateTime TransactionDate { get; set; }
             public DateTime DueDate { get; set; }
             public int Quantity { get; set; }
