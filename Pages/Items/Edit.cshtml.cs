@@ -8,6 +8,7 @@ using CDM.InventorySystem.Models;
 using CDM.InventorySystem.Data;
 using CDM.InventorySystem.Services;
 using CDM.InventorySystem.Utilities;
+using System.Runtime.Versioning;
 
 namespace CDM.InventorySystem.Pages.Items
 {
@@ -30,6 +31,7 @@ namespace CDM.InventorySystem.Pages.Items
             _context = context;
         }
 
+        [SupportedOSPlatform("windows6.1")]
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -44,17 +46,34 @@ namespace CDM.InventorySystem.Pages.Items
             }
 
             Item = item;
-            BarcodeImage = BarcodeGenerator.GenerateBarcodeImage(Item.BarcodeId);
+            
+            // Generate barcode image with platform check
+            if (OperatingSystem.IsWindows())
+            {
+                BarcodeImage = BarcodeGenerator.GenerateBarcodeImage(Item.BarcodeId);
+            }
+            else
+            {
+                BarcodeImage = string.Empty; // Fallback for non-Windows platforms
+            }
 
             return Page();
         }
 
+        [SupportedOSPlatform("windows6.1")]
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
-                // Regenerate barcode image for display
-                BarcodeImage = BarcodeGenerator.GenerateBarcodeImage(Item.BarcodeId);
+                // Regenerate barcode image for display with platform check
+                if (OperatingSystem.IsWindows())
+                {
+                    BarcodeImage = BarcodeGenerator.GenerateBarcodeImage(Item.BarcodeId);
+                }
+                else
+                {
+                    BarcodeImage = string.Empty;
+                }
                 return Page();
             }
 
