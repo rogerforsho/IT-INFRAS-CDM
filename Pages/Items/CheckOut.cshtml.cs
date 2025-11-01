@@ -29,10 +29,10 @@ namespace CDM.InventorySystem.Pages.Items
         }
 
         [BindProperty]
-        public string ItemId { get; set; }
+        public string ItemId { get; set; } = string.Empty;
 
         [BindProperty]
-        public string BorrowerId { get; set; }
+        public string BorrowerId { get; set; } = string.Empty;
 
         [BindProperty]
         public int Quantity { get; set; }
@@ -41,9 +41,9 @@ namespace CDM.InventorySystem.Pages.Items
         public DateTime DueDate { get; set; } = DateTime.Now.AddDays(14);
 
         [BindProperty]
-        public string Notes { get; set; }
+        public string Notes { get; set; } = string.Empty;
 
-        public SelectList Users { get; set; }
+        public SelectList Users { get; set; } = new SelectList(new List<ApplicationUser>(), "Id", "UserName");
 
         public async Task OnGetAsync()
         {
