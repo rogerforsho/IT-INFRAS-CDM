@@ -11,10 +11,10 @@ namespace CDM.InventorySystem.Pages.Items
     public class AddModel : PageModel
     {
         [BindProperty]
-        public Item Item { get; set; }
+        public Item Item { get; set; } = new Item();
 
-        public string BarcodeImage { get; set; }
-        public string GeneratedBarcode { get; set; }
+        public string BarcodeImage { get; set; } = string.Empty;
+        public string GeneratedBarcode { get; set; } = string.Empty;
 
         private readonly InventoryDbContext _context;
 
