@@ -122,19 +122,35 @@
 
     public async Task OnPostAsync()
     {
+        string Get(string key) => Request.Form[key].FirstOrDefault() ?? string.Empty;
+
+        int GetInt(string key)
+        {
+            var s = Request.Form[key].FirstOrDefault();
+            return int.TryParse(s, out var v) ? v : 0;
+        }
+
+        decimal GetDecimal(string key)
+        {
+            var s = Request.Form[key].FirstOrDefault();
+            return decimal.TryParse(s, out var v) ? v : 0m;
+        }
+
+        var totalStock = GetInt("Item.TotalStock");
+
         var item = new Item
         {
-            BarcodeId = Request.Form["Item.BarcodeId"],
-            ItemName = Request.Form["Item.ItemName"],
-            Description = Request.Form["Item.Description"],
-            Category = Request.Form["Item.Category"],
-            Location = Request.Form["Item.Location"],
-            TotalStock = int.Parse(Request.Form["Item.TotalStock"]),
-            MinStockLevel = int.Parse(Request.Form["Item.MinStockLevel"]),
-            PurchasePrice = decimal.Parse(Request.Form["Item.PurchasePrice"]),
-            Vendor = Request.Form["Item.Vendor"],
+            BarcodeId = Get("Item.BarcodeId"),
+            ItemName = Get("Item.ItemName"),
+            Description = Get("Item.Description"),
+            Category = Get("Item.Category"),
+            Location = Get("Item.Location"),
+            TotalStock = totalStock,
+            MinStockLevel = GetInt("Item.MinStockLevel"),
+            PurchasePrice = GetDecimal("Item.PurchasePrice"),
+            Vendor = Get("Item.Vendor"),
             // ✅ Automatically set current stock equal to total stock
-            CurrentStock = int.Parse(Request.Form["Item.TotalStock"]),
+            CurrentStock = totalStock,
             DateAdded = DateTime.Now
         };
 
