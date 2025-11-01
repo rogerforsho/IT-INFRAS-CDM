@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using CDM.InventorySystem.Models;
 using CDM.InventorySystem.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace CDM.InventorySystem.Pages.Transactions
 {
@@ -46,9 +47,9 @@ namespace CDM.InventorySystem.Pages.Transactions
 
         public async Task OnGetAsync()
         {
-            await LoadUsers();
-            await LoadTransactions();
-            await LoadStatistics();
+            await LoadUsersAsync();
+            await LoadTransactionsAsync();
+            await LoadStatisticsAsync();
         }
 
         public async Task<IActionResult> OnPostAsync()
@@ -58,29 +59,23 @@ namespace CDM.InventorySystem.Pages.Transactions
                 await LoadTransactionsAsync();
                 return Page();
             }
-            // Add your actual async implementation here
-            return RedirectToPage();
+            // Re-run loads with current filters
+            await OnGetAsync();
+            return Page();
+        }
+
+        private async Task LoadUsersAsync()
+        {
+            Users = await _userManager.Users
+                .Where(u => u.Role == "Student" || u.Role == "Staff")
+                .OrderBy(u => u.FullName)
+                .ToListAsync();
         }
 
         private async Task LoadTransactionsAsync()
         {
-            // Add your actual async data loading logic here
-            await Task.CompletedTask;
-        }
-
-        private async Task LoadUsers()
-        {
-            Users = _userManager.Users
-                .Where(u => u.Role == "Student" || u.Role == "Staff")
-                .OrderBy(u => u.FullName)
-                .ToList();
-        }
-
-        private async Task LoadTransactions()
-        {
             var allTransactions = await _transactionService.GetTransactionHistoryAsync();
 
-            // Apply filters
             var filteredTransactions = allTransactions.AsQueryable();
 
             if (!string.IsNullOrEmpty(TransactionType))
@@ -110,11 +105,9 @@ namespace CDM.InventorySystem.Pages.Transactions
                 };
             }
 
-            // Calculate pagination
             TotalTransactions = filteredTransactions.Count();
             TotalPages = (int)Math.Ceiling(TotalTransactions / (double)PageSize);
 
-            // Apply pagination
             Transactions = filteredTransactions
                 .OrderByDescending(t => t.TransactionDate)
                 .Skip((CurrentPage - 1) * PageSize)
@@ -122,7 +115,7 @@ namespace CDM.InventorySystem.Pages.Transactions
                 .ToList();
         }
 
-        private async Task LoadStatistics()
+        private async Task LoadStatisticsAsync()
         {
             var allTransactions = await _transactionService.GetTransactionHistoryAsync();
 
