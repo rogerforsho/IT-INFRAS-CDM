@@ -17,69 +17,69 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = CDM.InventorySystem
 build_property.RootNamespace = CDM.InventorySystem
-build_property.ProjectDir = C:\Users\Administrator\source\repos\CDM.InventorySystem\CDM.InventorySystem\
+build_property.ProjectDir = C:\Users\Administrator\Desktop\IT-INFRAS-CDM\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = true
-build_property.MSBuildProjectDirectory = C:\Users\Administrator\source\repos\CDM.InventorySystem\CDM.InventorySystem
+build_property.MSBuildProjectDirectory = C:\Users\Administrator\Desktop\IT-INFRAS-CDM
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/Administrator/source/repos/CDM.InventorySystem/CDM.InventorySystem/Pages/Error.cshtml]
+[C:/Users/Administrator/Desktop/IT-INFRAS-CDM/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Administrator/source/repos/CDM.InventorySystem/CDM.InventorySystem/Pages/Index.cshtml]
+[C:/Users/Administrator/Desktop/IT-INFRAS-CDM/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Administrator/source/repos/CDM.InventorySystem/CDM.InventorySystem/Pages/Inventory/Index.cshtml]
+[C:/Users/Administrator/Desktop/IT-INFRAS-CDM/Pages/Inventory/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW52ZW50b3J5XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Administrator/source/repos/CDM.InventorySystem/CDM.InventorySystem/Pages/Items/Add.cshtml]
+[C:/Users/Administrator/Desktop/IT-INFRAS-CDM/Pages/Items/Add.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSXRlbXNcQWRkLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Administrator/source/repos/CDM.InventorySystem/CDM.InventorySystem/Pages/Items/CheckIn.cshtml]
+[C:/Users/Administrator/Desktop/IT-INFRAS-CDM/Pages/Items/CheckIn.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSXRlbXNcQ2hlY2tJbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Administrator/source/repos/CDM.InventorySystem/CDM.InventorySystem/Pages/Items/CheckOut.cshtml]
+[C:/Users/Administrator/Desktop/IT-INFRAS-CDM/Pages/Items/CheckOut.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSXRlbXNcQ2hlY2tPdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Administrator/source/repos/CDM.InventorySystem/CDM.InventorySystem/Pages/Items/Edit.cshtml]
+[C:/Users/Administrator/Desktop/IT-INFRAS-CDM/Pages/Items/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSXRlbXNcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Administrator/source/repos/CDM.InventorySystem/CDM.InventorySystem/Pages/Privacy.cshtml]
+[C:/Users/Administrator/Desktop/IT-INFRAS-CDM/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Administrator/source/repos/CDM.InventorySystem/CDM.InventorySystem/Pages/Shared/_LoginPartial.cshtml]
+[C:/Users/Administrator/Desktop/IT-INFRAS-CDM/Pages/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Administrator/source/repos/CDM.InventorySystem/CDM.InventorySystem/Pages/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/Administrator/Desktop/IT-INFRAS-CDM/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Administrator/source/repos/CDM.InventorySystem/CDM.InventorySystem/Pages/Transactions/Index.cshtml]
+[C:/Users/Administrator/Desktop/IT-INFRAS-CDM/Pages/Transactions/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVHJhbnNhY3Rpb25zXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Administrator/source/repos/CDM.InventorySystem/CDM.InventorySystem/Pages/_ViewImports.cshtml]
+[C:/Users/Administrator/Desktop/IT-INFRAS-CDM/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Administrator/source/repos/CDM.InventorySystem/CDM.InventorySystem/Pages/_ViewStart.cshtml]
+[C:/Users/Administrator/Desktop/IT-INFRAS-CDM/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/Administrator/source/repos/CDM.InventorySystem/CDM.InventorySystem/Pages/Shared/_Layout.cshtml]
+[C:/Users/Administrator/Desktop/IT-INFRAS-CDM/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-eix9bmxnxb

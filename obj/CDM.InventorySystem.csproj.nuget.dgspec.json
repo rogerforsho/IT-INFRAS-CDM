@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Administrator\\source\\repos\\CDM.InventorySystem\\CDM.InventorySystem\\CDM.InventorySystem.csproj": {}
+    "C:\\Users\\Administrator\\Desktop\\IT-INFRAS-CDM\\CDM.InventorySystem.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Administrator\\source\\repos\\CDM.InventorySystem\\CDM.InventorySystem\\CDM.InventorySystem.csproj": {
+    "C:\\Users\\Administrator\\Desktop\\IT-INFRAS-CDM\\CDM.InventorySystem.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Administrator\\source\\repos\\CDM.InventorySystem\\CDM.InventorySystem\\CDM.InventorySystem.csproj",
+        "projectUniqueName": "C:\\Users\\Administrator\\Desktop\\IT-INFRAS-CDM\\CDM.InventorySystem.csproj",
         "projectName": "CDM.InventorySystem",
-        "projectPath": "C:\\Users\\Administrator\\source\\repos\\CDM.InventorySystem\\CDM.InventorySystem\\CDM.InventorySystem.csproj",
+        "projectPath": "C:\\Users\\Administrator\\Desktop\\IT-INFRAS-CDM\\CDM.InventorySystem.csproj",
         "packagesPath": "C:\\Users\\Administrator\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Administrator\\source\\repos\\CDM.InventorySystem\\CDM.InventorySystem\\obj\\",
+        "outputPath": "C:\\Users\\Administrator\\Desktop\\IT-INFRAS-CDM\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -96,7 +96,7 @@
             },
             "System.Drawing.Common": {
               "target": "Package",
-              "version": "[8.0.0, )"
+              "version": "[9.0.0, )"
             },
             "ZXing.Net": {
               "target": "Package",
