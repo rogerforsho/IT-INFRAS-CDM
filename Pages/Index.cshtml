@@ -147,7 +147,10 @@
                                         </h6>
                                         <small>@transaction.TransactionDate.ToString("MMM dd, yyyy hh:mm tt")</small>
                                     </div>
-                                    <p class="mb-1">Borrower: @transaction.Borrower?.FullName</p>
+                                    <p class="mb-1">
+                                        <strong>Borrower:</strong> @(transaction.Borrower?.FullName ?? transaction.Borrower?.Email ?? "Not specified")
+                                    </p>
+
                                     <small>Quantity: @transaction.Quantity</small>
                                 </div>
                             }

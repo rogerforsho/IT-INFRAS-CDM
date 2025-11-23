@@ -12,6 +12,7 @@
                     <h4 class="mb-0">Check Out Item</h4>
                 </div>
                 <div class="card-body">
+
                     <!-- Barcode Scanner Section -->
                     <div class="mb-4">
                         <h5>Scan Barcode</h5>
@@ -64,28 +65,25 @@
                         <form method="post" id="checkoutForm">
                             <input type="hidden" asp-for="ItemId" id="formItemId" />
 
+                            <!-- Borrower Dropdown -->
+                            <div class="form-group mb-3">
+                                <label asp-for="BorrowerId" class="control-label">Borrower *</label>
+                                <select asp-for="BorrowerId" asp-items="Model.Users" class="form-control">
+                                    <option value="">-- Select Borrower --</option>
+                                </select>
+                                <span asp-validation-for="BorrowerId" class="text-danger"></span>
+                            </div>
+
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
-                                        <label asp-for="BorrowerId" class="form-label">Borrower *</label>
-                                        <select asp-for="BorrowerId" class="form-select" asp-items="Model.Users">
-                                            <option value="">Select Borrower</option>
-                                        </select>
-                                        <span asp-validation-for="BorrowerId" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
                                         <label asp-for="Quantity" class="form-label">Quantity *</label>
-                                        <input asp-for="Quantity" class="form-control" type="number" min="1" value="1"
-                                               id="quantityInput" />
+                                        <input asp-for="Quantity" class="form-control" type="number" min="1"
+                                               id="quantityInput" value="1" />
                                         <span asp-validation-for="Quantity" class="text-danger"></span>
                                         <small class="form-text text-muted" id="maxQuantityText"></small>
                                     </div>
                                 </div>
-                            </div>
-
-                            <div class="row">
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label asp-for="DueDate" class="form-label">Due Date *</label>
@@ -94,12 +92,11 @@
                                         <span asp-validation-for="DueDate" class="text-danger"></span>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label asp-for="Notes" class="form-label">Notes</label>
-                                        <textarea asp-for="Notes" class="form-control" rows="2"></textarea>
-                                    </div>
-                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label asp-for="Notes" class="form-label">Notes</label>
+                                <textarea asp-for="Notes" class="form-control" rows="2"></textarea>
                             </div>
 
                             <div class="d-flex justify-content-between">
@@ -115,6 +112,7 @@
 
                     <!-- Alert Messages -->
                     <div id="alertContainer"></div>
+
                 </div>
             </div>
         </div>
@@ -143,7 +141,6 @@
             startBtn.style.display = 'none';
             stopBtn.style.display = 'inline-block';
 
-            // Initialize QuaggaJS barcode scanner
             Quagga.init({
                 inputStream: {
                     name: "Live",
@@ -228,8 +225,6 @@
             document.getElementById('maxQuantityText').textContent = `Max: ${item.currentStock} available`;
 
             document.getElementById('itemDetails').style.display = 'block';
-
-            // Scroll to details
             document.getElementById('itemDetails').scrollIntoView({ behavior: 'smooth' });
         }
 

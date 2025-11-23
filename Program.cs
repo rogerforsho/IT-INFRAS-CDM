@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using CDM.InventorySystem.Data;
 using CDM.InventorySystem.Models;
@@ -34,7 +34,7 @@ builder.Services.AddDbContext<InventoryDbContext>(options =>
     });
 });
 
-// Identity
+// Identity - ONLY ONE CONFIGURATION
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
@@ -48,10 +48,11 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddDefaultTokenProviders()
 .AddDefaultUI();
 
+// Configure cookies
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Identity/Account/Login";
-    options.AccessDeniedPath = "/Borrower/Index"; // ← Redirect here instead of Access Denied
+    options.AccessDeniedPath = "/Borrower/Index";
 });
 
 // Add services
@@ -121,6 +122,3 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.Run();
-
-// Add-Migration InitialCreate -Context InventoryDbContext
-// Update-Database -Context InventoryDbContext
