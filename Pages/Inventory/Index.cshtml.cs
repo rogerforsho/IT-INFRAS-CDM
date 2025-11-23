@@ -5,8 +5,10 @@ using CDM.InventorySystem.Models;
 using CDM.InventorySystem.Services;
 using System.Linq;
 
+
 namespace CDM.InventorySystem.Pages.Inventory
 {
+    [Authorize(Roles = "Admin,Staff")]
     [Authorize]
     public class IndexModel : PageModel
     {

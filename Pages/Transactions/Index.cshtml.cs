@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CDM.InventorySystem.Pages.Transactions
 {
-    [Authorize(Roles = "Admin,Staff")]
+    [Authorize(Roles = "Admin")]
     public class IndexModel : PageModel
     {
         private readonly ITransactionService _transactionService;

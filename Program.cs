@@ -7,9 +7,16 @@ using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Add Razor Pages + Runtime Compilation
 builder.Services.AddRazorPages()
     .AddRazorRuntimeCompilation();
+
+// Authorization Policies
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+    options.AddPolicy("StaffOrAdmin", policy => policy.RequireRole("Admin", "Staff"));
+});
 
 // Database configuration
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
@@ -27,7 +34,7 @@ builder.Services.AddDbContext<InventoryDbContext>(options =>
     });
 });
 
-// Add Identity services
+// Identity
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
@@ -41,11 +48,17 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddDefaultTokenProviders()
 .AddDefaultUI();
 
-// Add services to DI container
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Borrower/Index"; // ← Redirect here instead of Access Denied
+});
+
+// Add services
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 
-// Add session support
+// Session
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -54,12 +67,12 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
-// Add Controllers for API endpoints
+// Controllers (API)
 builder.Services.AddControllers();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
@@ -77,23 +90,21 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-// Use session
 app.UseSession();
 
 app.MapRazorPages();
 app.MapControllers();
 
-// Ensure database is created and migrations are applied
+// Auto apply migrations
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
+
     try
     {
         var context = services.GetRequiredService<InventoryDbContext>();
         var logger = services.GetRequiredService<ILogger<Program>>();
-        
-        // Ensure database exists and apply migrations
+
         if (context.Database.GetPendingMigrations().Any())
         {
             logger.LogInformation("Applying pending migrations...");

@@ -5,9 +5,11 @@ using CDM.InventorySystem.Models;
 using CDM.InventorySystem.Data;
 using CDM.InventorySystem.Utilities;
 using System.Runtime.Versioning;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CDM.InventorySystem.Pages.Items
 {
+    [Authorize(Roles = "Admin,Staff")]
     public class AddModel : PageModel
     {
         [BindProperty]

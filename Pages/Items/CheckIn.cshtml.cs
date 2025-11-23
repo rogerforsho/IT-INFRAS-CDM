@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CDM.InventorySystem.Pages.Items
 {
+    [Authorize(Roles = "Admin,Staff")]
     [Authorize]
     public class CheckInModel : PageModel
     {

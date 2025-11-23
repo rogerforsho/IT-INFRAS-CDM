@@ -16,7 +16,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CDM.InventorySystem")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+11774e7e1f80d99aba0276802b00549b5c1c1560")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e7697cd65b78ba316dc59b0a01f55eef984908c6")]
 [assembly: System.Reflection.AssemblyProductAttribute("CDM.InventorySystem")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CDM.InventorySystem")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

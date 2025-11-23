@@ -9,9 +9,11 @@ using CDM.InventorySystem.Services;
 using CDM.InventorySystem.Data;
 using Microsoft.EntityFrameworkCore;
 using CDM.InventorySystem.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CDM.InventorySystem.Pages.Items
 {
+    [Authorize(Roles = "Admin,Staff")]
     public class CheckOutModel : PageModel
     {
         private readonly ITransactionService _transactionService;
