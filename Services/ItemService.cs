@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using CDM.InventorySystem.Data;
+﻿using CDM.InventorySystem.Data;
 using CDM.InventorySystem.Models;
+using CDM.InventorySystem.Pages.Items;
+using Microsoft.EntityFrameworkCore;
 
 namespace CDM.InventorySystem.Services
 {
@@ -120,6 +121,31 @@ namespace CDM.InventorySystem.Services
             }
 
             return $"CDM-{prefix}-{nextNumber:D3}";
+        }
+
+        // 🔹 NEW: Get active transaction by barcode
+        public async Task<CheckInModel.TransactionViewModel?> GetActiveTransactionByBarcodeAsync(string barcode)
+        {
+            var activeTransaction = await _context.Transactions
+                .Include(t => t.Item)
+                .Include(t => t.Borrower)
+                .Where(t => t.Item.BarcodeId == barcode && t.ReturnDate == null)
+                .OrderBy(t => t.DueDate)
+                .FirstOrDefaultAsync();
+
+            if (activeTransaction == null)
+                return null;
+
+            return new CheckInModel.TransactionViewModel
+            {
+                TransactionId = activeTransaction.Id,
+                Item = activeTransaction.Item!,
+                Borrower = activeTransaction.Borrower!,
+                TransactionDate = activeTransaction.TransactionDate,
+                DueDate = activeTransaction.DueDate,
+                Quantity = activeTransaction.Quantity,
+                IsOverdue = activeTransaction.IsOverdue
+            };
         }
     }
 }
