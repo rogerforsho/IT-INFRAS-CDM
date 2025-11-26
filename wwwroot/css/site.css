@@ -1,31 +1,254 @@
-html {
-  font-size: 14px;
+/* Base Reset & Modern Font */
+body, html {
+    font-family: 'Segoe UI', 'Inter', 'Roboto', 'Arial', sans-serif;
+    background: #f7f8fa;
+    color: #212529;
+    font-size: 15px;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+.minimalist-nav {
+    background: #fff;
+    border: none;
+    padding: 0.75rem 2rem;
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+.navbar-brand {
+    letter-spacing: -1px;
 }
 
-html {
-  position: relative;
-  min-height: 100%;
+.minimalist-nav-link {
+    font-weight: 500;
+    color: #454545 !important;
+    padding: 0.5rem 1.25rem;
+    border-radius: 1.5rem;
+    transition: background 0.15s, color 0.15s;
 }
 
-body {
-  margin-bottom: 60px;
+    .minimalist-nav-link.active, .minimalist-nav-link:hover {
+        background: #e3e9f5;
+        color: #1751ff !important;
+    }
+
+.navbar-nav {
+    gap: 0.5rem;
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+.minimalist-alert {
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    box-shadow: 0 2px 12px rgba(80, 110, 255, 0.07);
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+.minimalist-footer {
+    background: transparent;
+    border-top: 1px solid #e9e9ec;
 }
+
+main {
+    background: #fff;
+    border-radius: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 2.5rem 1.5rem 1.5rem 1.5rem;
+    box-shadow: 0 2px 16px rgba(120,130,210,0.05);
+    min-height: 65vh;
+}
+
+@media (max-width: 991.98px) {
+    .minimalist-nav {
+        max-width: 100%;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    main {
+        padding: 1.2rem 0.5rem 0.7rem 0.5rem;
+    }
+}
+
+/* Rounded form fields and buttons */
+input, .form-control, .btn, .btn-close {
+    border-radius: 1.25rem !important;
+}
+
+.btn-primary {
+    background: #1751ff;
+    border: none;
+    font-weight: 500;
+    padding: 0.5rem 1.9rem;
+    border-radius: 2rem;
+    box-shadow: 0 1px 8px rgba(70, 110, 210, 0.13);
+    transition: background 0.12s;
+}
+
+    .btn-primary:hover, .btn-primary:focus {
+        background: #2359e8;
+        color: #fff;
+    }
+
+.form-floating > .form-control::placeholder {
+    color: #b4bcd1;
+    opacity: 1;
+}
+
+/* Gentle placeholder and selection colors */
+::selection {
+    background: #e9f0fe;
+}
+
+/* Light accent for cards/alerts */
+.card, .alert {
+    border-radius: 1.2rem;
+    box-shadow: 0 2px 10px rgba(180,180,200,0.08);
+}
+
+/* Remove blue focus ring */
+*:focus {
+    box-shadow: none !important;
+    outline: none !important;
+}
+.stats-card {
+    min-height: 120px;
+    box-shadow: 0 2px 8px rgba(80,110,255,0.06);
+    border-radius: 1.5rem !important;
+}
+
+.card-header {
+    border-radius: 1.5rem 1.5rem 0 0 !important;
+}
+.card {
+    border-radius: 1.5rem !important;
+}
+
+input.form-control, select.form-select, .btn, .input-group-text, textarea.form-control {
+    border-radius: 1.35rem !important;
+}
+.card {
+    border-radius: 1.5rem !important;
+}
+
+.badge {
+    font-size: 1em;
+}
+
+input.form-control, select.form-select, .btn {
+    border-radius: 1.35rem !important;
+}
+.card {
+    border-radius: 1.5rem !important;
+}
+
+input.form-control, select.form-select, .btn, .input-group-text, textarea.form-control {
+    border-radius: 1.35rem !important;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+.stats-card, .card, .table th, .table td, .btn, .form-control, .form-select, .input-group-text {
+    border-radius: 1.35rem !important;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+}
+.card {
+    border-radius: 1.5rem !important;
+}
+
+input.form-control, .btn, .breadcrumb, .form-select, .input-group-text {
+    border-radius: 1.35rem !important;
+}
+
+.breadcrumb {
+    background: transparent;
+    margin-bottom: 0;
+}
+
+img.img-fluid {
+    max-height: 120px;
+}
+.card {
+    border-radius: 1.5rem !important;
+}
+
+.input-group-text, .btn, .alert, dt, dd {
+    border-radius: 1.35rem !important;
+}
+
+dt {
+    font-weight: 500;
+    color: #58575c;
+}
+.card {
+    border-radius: 1.5rem !important;
+}
+
+input.form-control, .btn, .form-select, .input-group-text {
+    border-radius: 1.35rem !important;
+}
+.card, .stats-card {
+    border-radius: 1.5rem !important;
+}
+
+input.form-control, .btn, .badge, .alert {
+    border-radius: 1.35rem !important;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+}
+.card {
+    border-radius: 1.5rem !important;
+}
+
+input.form-control, .btn, .form-select, .input-group-text {
+    border-radius: 1.35rem !important;
+}
+
+
+
+.card {
+    border-radius: 1.5rem !important;
+}
+
+input.form-control, .btn, .form-check-input, .form-select {
+    border-radius: 1.35rem !important;
+}
+
+.fs-5 {
+    font-size: 1.22rem;
+}
+
+.fs-6 {
+    font-size: 1.07rem;
+}
+.card {
+    border-radius: 1.5rem !important;
+}
+
+input.form-control, .btn, .form-check-input {
+    border-radius: 1.35rem !important;
+}
+
+.fs-5 {
+    font-size: 1.22rem;
+}
+
+.fs-6 {
+    font-size: 1.07rem;
+}
+.card {
+    border-radius: 1.5rem !important;
+}
+
+.btn, .alert {
+    border-radius: 1.35rem !important;
+}
+
+.fs-5 {
+    font-size: 1.22rem;
+}
+

@@ -26,10 +26,15 @@ namespace CDM.InventorySystem.Services
             return await _context.Items.FindAsync(id);
         }
 
+        // FIXED: Normalizes for case and whitespace
         public async Task<Item?> GetItemByBarcodeAsync(string barcodeId)
         {
+            if (string.IsNullOrWhiteSpace(barcodeId))
+                return null;
+
+            string normalized = barcodeId.Trim().ToUpper();
             return await _context.Items
-                .FirstOrDefaultAsync(i => i.BarcodeId == barcodeId);
+                .FirstOrDefaultAsync(i => i.BarcodeId.ToUpper() == normalized);
         }
 
         public async Task<bool> AddItemAsync(Item item)
@@ -123,13 +128,14 @@ namespace CDM.InventorySystem.Services
             return $"CDM-{prefix}-{nextNumber:D3}";
         }
 
-        // 🔹 NEW: Get active transaction by barcode
+        // Active transaction by barcode—should ALSO normalize
         public async Task<CheckInModel.TransactionViewModel?> GetActiveTransactionByBarcodeAsync(string barcode)
         {
+            string normalized = barcode.Trim().ToUpper();
             var activeTransaction = await _context.Transactions
                 .Include(t => t.Item)
                 .Include(t => t.Borrower)
-                .Where(t => t.Item.BarcodeId == barcode && t.ReturnDate == null)
+                .Where(t => t.Item.BarcodeId.ToUpper() == normalized && t.ReturnDate == null)
                 .OrderBy(t => t.DueDate)
                 .FirstOrDefaultAsync();
 

@@ -5,165 +5,168 @@
     ViewData["Title"] = "My Borrowed Items";
 }
 
-<div class="container mt-4">
-    <h2>Welcome, @User.Identity!.Name!</h2>
-    <p class="text-muted">@User.FindFirstValue(ClaimTypes.Email)</p>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+            <h2 class="fw-bold mb-1">Welcome, @User.Identity!.Name!</h2>
+            <p class="text-secondary mb-4">@User.FindFirstValue(ClaimTypes.Email)</p>
 
-    <!-- Summary Cards -->
-    <div class="row mb-4">
-        <div class="col-md-4">
-            <div class="card text-white bg-info">
-                <div class="card-body">
-                    <h5 class="card-title">Currently Borrowed</h5>
-                    <h2 class="card-text">@Model.ActiveTransactions.Count</h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-danger">
-                <div class="card-body">
-                    <h5 class="card-title">Overdue Items</h5>
-                    <h2 class="card-text">@Model.OverdueCount</h2>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card text-white bg-success">
-                <div class="card-body">
-                    <h5 class="card-title">Total Borrowed</h5>
-                    <h2 class="card-text">@Model.MyTransactions.Count</h2>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Active Loans -->
-    @if (Model.ActiveTransactions.Any())
-    {
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5>Active Loans</h5>
-            </div>
-            <div class="card-body">
-                <table class="table table-hover">
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Borrowed Date</th>
-                            <th>Due Date</th>
-                            <th>Quantity</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var transaction in Model.ActiveTransactions)
-                        {
-                            <tr class="@(transaction.IsOverdue ? "table-danger" : "")">
-                                <td>
-                                    <strong>@(transaction.Item?.ItemName ?? "Unknown Item")</strong>
-                                </td>
-                                <td>@transaction.TransactionDate.ToString("MMM dd, yyyy")</td>
-                                <td>
-                                    @transaction.DueDate.ToString("MMM dd, yyyy")
-                                    @if (transaction.IsOverdue)
-                                    {
-                                        <br />
-                            
-                                        <span class="badge bg-danger">Overdue!</span>
-                                    }
-                                    else
-                                    {
-                                        var daysLeft = (transaction.DueDate - DateTime.Now).Days;
-                                        <br />
-                            
-                                        <small class="text-muted">(@daysLeft days left)</small>
-                                    }
-                                </td>
-                                <td>@transaction.Quantity</td>
-                                <td>
-                                    @if (transaction.IsOverdue)
-                                    {
-                                        <span class="badge bg-danger">Overdue</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-success">Active</span>
-                                    }
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-
-                @if (Model.OverdueCount > 0)
-                {
-                    <div class="alert alert-danger mt-3">
-                        <strong>Warning:</strong> You have @Model.OverdueCount overdue item(s).
-                        Please return them to the IT Office immediately.
+            <!-- Summary Cards -->
+            <div class="row g-3 mb-4">
+                <div class="col-12 col-md-4">
+                    <div class="card stats-card bg-info text-white rounded-4 shadow text-center">
+                        <div class="card-body py-3">
+                            <h5 class="fw-semibold mb-2">Currently Borrowed</h5>
+                            <h2 class="fw-bold mb-0">@Model.ActiveTransactions.Count</h2>
+                        </div>
                     </div>
-                }
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="card stats-card bg-danger text-white rounded-4 shadow text-center">
+                        <div class="card-body py-3">
+                            <h5 class="fw-semibold mb-2">Overdue Items</h5>
+                            <h2 class="fw-bold mb-0">@Model.OverdueCount</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="card stats-card bg-success text-white rounded-4 shadow text-center">
+                        <div class="card-body py-3">
+                            <h5 class="fw-semibold mb-2">Total Borrowed</h5>
+                            <h2 class="fw-bold mb-0">@Model.MyTransactions.Count</h2>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    }
-    else
-    {
-        <div class="alert alert-info">
-            You currently have no borrowed items.
-        </div>
-    }
 
-    <!-- Return History -->
-    @if (Model.ReturnedTransactions.Any())
-    {
-        <div class="card mb-4">
-            <div class="card-header bg-secondary text-white">
-                <h5>Recent Return History</h5>
-            </div>
-            <div class="card-body">
-                <table class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Borrowed</th>
-                            <th>Returned</th>
-                            <th>Duration</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var transaction in Model.ReturnedTransactions)
-                        {
-                            <tr>
-                                <td>@(transaction.Item?.ItemName ?? "Unknown")</td>
-                                <td>@transaction.TransactionDate.ToString("MMM dd")</td>
-                                <td>@(transaction.ReturnDate?.ToString("MMM dd") ?? "N/A")</td>
-                                <td>
-                                    @if (transaction.ReturnDate.HasValue)
+            <!-- Active Loans -->
+            @if (Model.ActiveTransactions.Any())
+            {
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-header bg-primary text-white rounded-top-4">
+                        <h5 class="mb-0 fw-semibold">Active Loans</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Borrowed Date</th>
+                                        <th>Due Date</th>
+                                        <th>Quantity</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var transaction in Model.ActiveTransactions)
                                     {
-                                        var duration = (transaction.ReturnDate.Value - transaction.TransactionDate).Days;
-                                        @duration
-                                        <text> days</text>
+                                        <tr class="@(transaction.IsOverdue ? "table-danger" : "")">
+                                            <td><strong>@(transaction.Item?.ItemName ?? "Unknown Item")</strong></td>
+                                            <td>@transaction.TransactionDate.ToString("MMM dd, yyyy")</td>
+                                            <td>
+                                                @transaction.DueDate.ToString("MMM dd, yyyy")
+                                                @if (transaction.IsOverdue)
+                                                {
+                                                    <br />
+                                        
+                                                    <span class="badge bg-danger rounded-pill px-3">Overdue!</span>
+                                                }
+                                                else
+                                                {
+                                                    var daysLeft = (transaction.DueDate - DateTime.Now).Days;
+                                                    <br />
+                                        
+                                                    <small class="text-muted">(@daysLeft days left)</small>
+                                                }
+                                            </td>
+                                            <td>@transaction.Quantity</td>
+                                            <td>
+                                                @if (transaction.IsOverdue)
+                                                {
+                                                    <span class="badge bg-danger rounded-pill px-3">Overdue</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-success rounded-pill px-3">Active</span>
+                                                }
+                                            </td>
+                                        </tr>
                                     }
-                                </td>
-                            </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        @if (Model.OverdueCount > 0)
+                        {
+                            <div class="alert alert-danger rounded-pill px-3 mt-3 fw-medium text-center">
+                                <strong>Warning:</strong> You have @Model.OverdueCount overdue item(s). Please return them to the IT Office immediately.
+                            </div>
                         }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    }
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info rounded-pill px-3 fw-medium text-center mb-4">
+                    You currently have no borrowed items.
+                </div>
+            }
 
-    <!-- Help Box -->
-    <div class="card border-info">
-        <div class="card-header bg-info text-white">
-            <h5>Need Help?</h5>
-        </div>
-        <div class="card-body">
-            <ul>
-                <li><strong>To borrow items:</strong> Visit IT Office - Room 201</li>
-                <li><strong>To return items:</strong> Visit IT Office - Room 201</li>
-                <li><strong>Office Hours:</strong> Mon-Fri, 8:00 AM - 5:00 PM</li>
-                <li><strong>Contact:</strong> itoffice@cdm.edu.ph</li>
-            </ul>
+            <!-- Return History -->
+            @if (Model.ReturnedTransactions.Any())
+            {
+                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                    <div class="card-header bg-secondary text-white rounded-top-4">
+                        <h5 class="mb-0 fw-semibold">Recent Return History</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-sm align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Item</th>
+                                        <th>Borrowed</th>
+                                        <th>Returned</th>
+                                        <th>Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var transaction in Model.ReturnedTransactions)
+                                    {
+                                        <tr>
+                                            <td>@(transaction.Item?.ItemName ?? "Unknown")</td>
+                                            <td>@transaction.TransactionDate.ToString("MMM dd")</td>
+                                            <td>@(transaction.ReturnDate?.ToString("MMM dd") ?? "N/A")</td>
+                                            <td>
+                                                @if (transaction.ReturnDate.HasValue)
+                                                {
+                                                    var duration = (transaction.ReturnDate.Value - transaction.TransactionDate).Days;
+                                                    @duration <text> days</text>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <!-- Help Box -->
+            <div class="card border-info border-2 mb-4 rounded-4">
+                <div class="card-header bg-info text-white rounded-top-4">
+                    <h5 class="mb-0 fw-semibold">Need Help?</h5>
+                </div>
+                <div class="card-body py-3">
+                    <ul class="ps-3 mb-0">
+                        <li><strong>To borrow items:</strong> Visit IT Office - Room 201</li>
+                        <li><strong>To return items:</strong> Visit IT Office - Room 201</li>
+                        <li><strong>Office Hours:</strong> Mon-Fri, 8:00 AM - 5:00 PM</li>
+                        <li><strong>Contact:</strong> itoffice@cdm.edu.ph</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -34,7 +34,7 @@ builder.Services.AddDbContext<InventoryDbContext>(options =>
     });
 });
 
-// Identity - ONLY ONE CONFIGURATION
+// Identity configuration (ONLY this block!)
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
@@ -55,7 +55,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Borrower/Index";
 });
 
-// Add services
+// Add scoped services
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IItemService, ItemService>();
 

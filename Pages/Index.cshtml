@@ -1,68 +1,65 @@
 ﻿@page
 @using CDM.InventorySystem.Models
-
 @model CDM.InventorySystem.Pages.IndexModel
 @{
     ViewData["Title"] = "Dashboard";
 }
 
-<div class="container">
-    <h1 class="display-4">CDM Inventory Dashboard</h1>
-    <p class="lead">Welcome, @User.Identity.Name!</p>
+<div class="container-fluid px-0">
+    <div class="mb-4">
+        <h1 class="display-5 fw-bold mb-1">CDM Inventory Dashboard</h1>
+        <p class="lead text-secondary mb-3">Welcome, @User.Identity.Name!</p>
+    </div>
 
     <!-- Quick Stats -->
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card text-white bg-primary">
-                <div class="card-body">
-                    <h5 class="card-title">Total Items</h5>
-                    <h2 class="card-text">@Model.TotalItems</h2>
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow stats-card bg-primary text-white rounded-4 text-center">
+                <div class="card-body py-3">
+                    <h5 class="card-title fw-semibold mb-2">Total Items</h5>
+                    <h2 class="card-text display-6 fw-bold mb-0">@Model.TotalItems</h2>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-white bg-warning">
-                <div class="card-body">
-                    <h5 class="card-title">Low Stock</h5>
-                    <h2 class="card-text">@Model.LowStockCount</h2>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow stats-card bg-warning text-white rounded-4 text-center">
+                <div class="card-body py-3">
+                    <h5 class="card-title fw-semibold mb-2">Low Stock</h5>
+                    <h2 class="card-text display-6 fw-bold mb-0">@Model.LowStockCount</h2>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-white bg-info">
-                <div class="card-body">
-                    <h5 class="card-title">Checked Out</h5>
-                    <h2 class="card-text">@Model.CheckedOutCount</h2>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow stats-card bg-info text-white rounded-4 text-center">
+                <div class="card-body py-3">
+                    <h5 class="card-title fw-semibold mb-2">Checked Out</h5>
+                    <h2 class="card-text display-6 fw-bold mb-0">@Model.CheckedOutCount</h2>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card text-white bg-danger">
-                <div class="card-body">
-                    <h5 class="card-title">Overdue</h5>
-                    <h2 class="card-text">@Model.OverdueCount</h2>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow stats-card bg-danger text-white rounded-4 text-center">
+                <div class="card-body py-3">
+                    <h5 class="card-title fw-semibold mb-2">Overdue</h5>
+                    <h2 class="card-text display-6 fw-bold mb-0">@Model.OverdueCount</h2>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Quick Actions -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Quick Actions</h5>
-                </div>
-                <div class="card-body">
-                    <a class="btn btn-primary me-2" href="/Inventory">View Inventory</a>
-                    <a class="btn btn-success me-2" href="/Items/Add">Add New Item</a>
-                    <a class="btn btn-warning me-2" href="/Items/CheckOut">Check Out Item</a>
-                    <a class="btn btn-info me-2" href="/Items/CheckIn">Check In Item</a>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a class="btn btn-secondary me-2" href="/Transactions">View Transactions</a>
-                    }
-                </div>
+    <div class="card mb-4 border-0 shadow-sm rounded-4">
+        <div class="card-body py-3">
+            <h5 class="mb-3 fw-semibold text-secondary">Quick Actions</h5>
+            <div class="d-flex flex-wrap gap-2">
+                <a class="btn btn-primary px-4" href="/Inventory">View Inventory</a>
+                <a class="btn btn-success px-4" href="/Items/Add">Add New Item</a>
+                <a class="btn btn-warning px-4 text-white" href="/Items/CheckOut">Check Out Item</a>
+                <a class="btn btn-info px-4 text-white" href="/Items/CheckIn">Check In Item</a>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a class="btn btn-secondary px-4" href="/Transactions">View Transactions</a>
+                }
             </div>
         </div>
     </div>
@@ -70,98 +67,89 @@
     <!-- Low Stock Alerts -->
     @if (Model.LowStockItems.Any())
     {
-        <div class="row">
-            <div class="col-12">
-                <div class="card border-warning">
-                    <div class="card-header bg-warning text-white">
-                        <h5>⚠️ Low Stock Alerts</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-sm">
-                                <thead>
-                                    <tr>
-                                        <th>Barcode</th>
-                                        <th>Item Name</th>
-                                        <th>Current Stock</th>
-                                        <th>Min Stock</th>
-                                        <th>Status</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model.LowStockItems)
-                                    {
-                                        <tr>
-                                            <td>@item.BarcodeId</td>
-                                            <td>@item.ItemName</td>
-                                            <td>
-                                                <span class="badge bg-danger">@item.CurrentStock</span>
-                                            </td>
-                                            <td>@item.MinStockLevel</td>
-                                            <td>
-                                                @if (item.CurrentStock == 0)
-                                                {
-                                                    <span class="badge bg-danger">Out of Stock</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="badge bg-warning">Low Stock</span>
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+        <div class="card mb-4 border-warning border-2 shadow-sm rounded-4">
+            <div class="card-header bg-warning text-white rounded-top-4">
+                <h5 class="mb-0">⚠️ Low Stock Alerts</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Barcode</th>
+                                <th>Item Name</th>
+                                <th>Current Stock</th>
+                                <th>Min Stock</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.LowStockItems)
+                            {
+                                <tr>
+                                    <td>@item.BarcodeId</td>
+                                    <td>@item.ItemName</td>
+                                    <td>
+                                        <span class="badge rounded-pill bg-danger px-3 py-2 fs-6">@item.CurrentStock</span>
+                                    </td>
+                                    <td>@item.MinStockLevel</td>
+                                    <td>
+                                        @if (item.CurrentStock == 0)
+                                        {
+                                            <span class="badge rounded-pill bg-danger px-3 py-2">Out of Stock</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge rounded-pill bg-warning text-dark px-3 py-2">Low Stock</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     }
 
     <!-- Recent Activity -->
-    <div class="row mt-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5>Recent Activity</h5>
-                </div>
-                <div class="card-body">
-                    @if (Model.RecentTransactions.Any())
+    <div class="card border-0 shadow-sm rounded-4 mt-4">
+        <div class="card-header bg-white rounded-top-4">
+            <h5 class="mb-0 fw-semibold text-secondary">Recent Activity</h5>
+        </div>
+        <div class="card-body">
+            @if (Model.RecentTransactions.Any())
+            {
+                <div class="list-group list-group-flush">
+                    @foreach (var transaction in Model.RecentTransactions)
                     {
-                        <div class="list-group">
-                            @foreach (var transaction in Model.RecentTransactions)
-                            {
-                                <div class="list-group-item">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">
-                                            @if (transaction.TransactionType == "CheckOut")
-                                            {
-                                                <span class="badge bg-success">Check Out</span>
-                                            }
-                                            else
-                                            {
-                                                <span class="badge bg-info">Check In</span>
-                                            }
-                                            @transaction.Item?.ItemName
-                                        </h6>
-                                        <small>@transaction.TransactionDate.ToString("MMM dd, yyyy hh:mm tt")</small>
-                                    </div>
-                                    <p class="mb-1">
-                                        <strong>Borrower:</strong> @(transaction.Borrower?.FullName ?? transaction.Borrower?.Email ?? "Not specified")
-                                    </p>
-
-                                    <small>Quantity: @transaction.Quantity</small>
-                                </div>
-                            }
+                        <div class="list-group-item d-flex flex-column gap-1 py-2">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0 fw-medium">
+                                    @if (transaction.TransactionType == "CheckOut")
+                                    {
+                                        <span class="badge bg-success">Check Out</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-info">Check In</span>
+                                    }
+                                    <span class="ms-2">@transaction.Item?.ItemName</span>
+                                </h6>
+                                <small class="text-secondary">@transaction.TransactionDate.ToString("MMM dd, yyyy hh:mm tt")</small>
+                            </div>
+                            <p class="mb-0">
+                                <strong>Borrower:</strong> @(transaction.Borrower?.FullName ?? transaction.Borrower?.Email ?? "Not specified")
+                            </p>
+                            <small class="text-secondary">Quantity: @transaction.Quantity</small>
                         </div>
                     }
-                    else
-                    {
-                        <p class="text-muted">No recent activity.</p>
-                    }
                 </div>
-            </div>
+            }
+            else
+            {
+                <p class="text-muted">No recent activity.</p>
+            }
         </div>
     </div>
 </div>

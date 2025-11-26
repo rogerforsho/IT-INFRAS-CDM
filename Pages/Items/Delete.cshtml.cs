@@ -60,14 +60,14 @@ namespace CDM.InventorySystem.Pages.Items
             if (Item != null)
             {
                 // Check for active transactions
-                var hasActiveTransactions = await _context.Transactions
-                    .AnyAsync(t => t.ItemId == id && t.Status == TransactionStatus.CheckedOut);
-
-                if (hasActiveTransactions)
+                // Check for ANY transactions
+                var hasAnyTransactions = await _context.Transactions.AnyAsync(t => t.ItemId == id);
+                if (hasAnyTransactions)
                 {
-                    TempData["ErrorMessage"] = "Cannot delete item with active check-outs!";
+                    TempData["ErrorMessage"] = "Cannot delete item with any transactions recorded!";
                     return RedirectToPage("/Inventory/Index");
                 }
+
 
                 _context.Items.Remove(Item);
                 await _context.SaveChangesAsync();

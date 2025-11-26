@@ -20,7 +20,10 @@ namespace CDM.InventorySystem.Controllers.Api
         [HttpGet("barcode/{barcode}")]
         public async Task<ActionResult<Item>> GetItemByBarcode(string barcode)
         {
-            var item = await _itemService.GetItemByBarcodeAsync(barcode);
+            // Normalize input in C# (optional if you do it in the service)
+            barcode = barcode?.Trim().ToUpper();
+
+            var item = await _itemService.GetItemByBarcodeAsync(barcode ?? "");
             if (item == null)
             {
                 return NotFound(new { message = "Item not found" });

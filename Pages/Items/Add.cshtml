@@ -7,156 +7,109 @@
 @{
     ViewData["Title"] = "Add New Item";
 
-    // Generate barcode on GET
     string generatedBarcode = Guid.NewGuid().ToString("N");
     string barcodeImage = BarcodeGenerator.GenerateBarcodeImage(generatedBarcode);
 
-    // Initialize item if null
     if (Model.Item == null)
     {
         Model.Item = new Item { BarcodeId = generatedBarcode };
     }
 }
 
-<div class="container-fluid px-4">
-    <h1 class="mt-4">Add New Item</h1>
-    <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item"><a href="/Items">Items</a></li>
-        <li class="breadcrumb-item active">Add New Item</li>
-    </ol>
-
-    <div class="card mb-4">
-        <div class="card-header">
-            <i class="fas fa-table me-1"></i>
-            Item Details
-        </div>
-        <div class="card-body">
-            <form method="post">
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3">
-                            <input asp-for="Item.ItemName" class="form-control" />
-                            <label asp-for="Item.ItemName">Item Name</label>
-                            <span asp-validation-for="Item.ItemName" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <input asp-for="Item.Description" class="form-control" />
-                            <label asp-for="Item.Description">Description</label>
-                            <span asp-validation-for="Item.Description" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <input asp-for="Item.Category" class="form-control" />
-                            <label asp-for="Item.Category">Category</label>
-                            <span asp-validation-for="Item.Category" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <input asp-for="Item.Location" class="form-control" />
-                            <label asp-for="Item.Location">Location</label>
-                            <span asp-validation-for="Item.Location" class="text-danger"></span>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3">
-                            <input asp-for="Item.TotalStock" class="form-control" type="number" />
-                            <label asp-for="Item.TotalStock">Total Stock</label>
-                            <span asp-validation-for="Item.TotalStock" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <input asp-for="Item.MinStockLevel" class="form-control" type="number" />
-                            <label asp-for="Item.MinStockLevel">Minimum Stock Level</label>
-                            <span asp-validation-for="Item.MinStockLevel" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <input asp-for="Item.PurchasePrice" class="form-control" type="number" step="0.01" />
-                            <label asp-for="Item.PurchasePrice">Purchase Price</label>
-                            <span asp-validation-for="Item.PurchasePrice" class="text-danger"></span>
-                        </div>
-
-                        <div class="form-floating mb-3">
-                            <input asp-for="Item.Vendor" class="form-control" />
-                            <label asp-for="Item.Vendor">Vendor</label>
-                            <span asp-validation-for="Item.Vendor" class="text-danger"></span>
-                        </div>
-                    </div>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="card border-0 shadow rounded-4">
+                <div class="card-header bg-white rounded-top-4">
+                    <h1 class="fw-bold mb-0"><i class="bi bi-plus-circle"></i> Add New Item</h1>
                 </div>
+                <div class="card-body p-4">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/Inventory">Inventory</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Add New Item</li>
+                        </ol>
+                    </nav>
+                    <form method="post">
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Item.ItemName" class="form-control rounded-pill" />
+                                    <label asp-for="Item.ItemName">Item Name</label>
+                                    <span asp-validation-for="Item.ItemName" class="text-danger"></span>
+                                </div>
 
-                <div class="row mb-3">
-                    <div class="col-md-6">
-                        <div class="form-floating mb-3">
-                            <input asp-for="Item.BarcodeId" class="form-control" readonly value="@generatedBarcode" />
-                            <label asp-for="Item.BarcodeId">Barcode ID</label>
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Item.Description" class="form-control rounded-pill" />
+                                    <label asp-for="Item.Description">Description</label>
+                                    <span asp-validation-for="Item.Description" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Item.Category" class="form-control rounded-pill" />
+                                    <label asp-for="Item.Category">Category</label>
+                                    <span asp-validation-for="Item.Category" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Item.Location" class="form-control rounded-pill" />
+                                    <label asp-for="Item.Location">Location</label>
+                                    <span asp-validation-for="Item.Location" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Item.TotalStock" class="form-control rounded-pill" type="number" />
+                                    <label asp-for="Item.TotalStock">Total Stock</label>
+                                    <span asp-validation-for="Item.TotalStock" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Item.MinStockLevel" class="form-control rounded-pill" type="number" />
+                                    <label asp-for="Item.MinStockLevel">Minimum Stock Level</label>
+                                    <span asp-validation-for="Item.MinStockLevel" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Item.PurchasePrice" class="form-control rounded-pill" type="number" step="0.01" />
+                                    <label asp-for="Item.PurchasePrice">Purchase Price</label>
+                                    <span asp-validation-for="Item.PurchasePrice" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                    <input asp-for="Item.Vendor" class="form-control rounded-pill" />
+                                    <label asp-for="Item.Vendor">Vendor</label>
+                                    <span asp-validation-for="Item.Vendor" class="text-danger"></span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6 text-center">
-                        <img src="@barcodeImage" alt="Barcode" class="img-fluid" />
-                    </div>
-                </div>
 
-                <div class="mt-4 mb-0">
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-block">Add Item</button>
-                    </div>
+                        <div class="row g-4 mb-4 align-items-center">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input asp-for="Item.BarcodeId" class="form-control rounded-pill" readonly value="@generatedBarcode" />
+                                    <label asp-for="Item.BarcodeId">Barcode ID</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 text-center">
+                                <img src="@barcodeImage" alt="Barcode" class="img-fluid rounded-3 border" />
+                                <div class="small text-muted mt-2">Barcode is auto-generated</div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 mb-0">
+                            <button type="submit" class="btn btn-primary rounded-pill px-4 py-2 fw-bold w-100">
+                                <i class="bi bi-check2-circle"></i> Add Item
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
-
-@functions {
-    public class AddModel
-    {
-        public Item Item { get; set; } = new Item();
-    }
-
-    public async Task OnPostAsync()
-    {
-        string Get(string key) => Request.Form[key].FirstOrDefault() ?? string.Empty;
-
-        int GetInt(string key)
-        {
-            var s = Request.Form[key].FirstOrDefault();
-            return int.TryParse(s, out var v) ? v : 0;
-        }
-
-        decimal GetDecimal(string key)
-        {
-            var s = Request.Form[key].FirstOrDefault();
-            return decimal.TryParse(s, out var v) ? v : 0m;
-        }
-
-        var totalStock = GetInt("Item.TotalStock");
-
-        var item = new Item
-        {
-            BarcodeId = Get("Item.BarcodeId"),
-            ItemName = Get("Item.ItemName"),
-            Description = Get("Item.Description"),
-            Category = Get("Item.Category"),
-            Location = Get("Item.Location"),
-            TotalStock = totalStock,
-            MinStockLevel = GetInt("Item.MinStockLevel"),
-            PurchasePrice = GetDecimal("Item.PurchasePrice"),
-            Vendor = Get("Item.Vendor"),
-            // ✅ Automatically set current stock equal to total stock
-            CurrentStock = totalStock,
-            DateAdded = DateTime.Now
-        };
-
-        _context.Items.Add(item);
-        await _context.SaveChangesAsync();
-
-        Response.Redirect("/Inventory/Index");
-    }
+    <partial name="_ValidationScriptsPartial" />
 }

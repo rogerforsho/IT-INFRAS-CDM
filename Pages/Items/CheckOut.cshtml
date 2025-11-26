@@ -7,38 +7,79 @@
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-8">
-            <div class="card">
-                <div class="card-header">
-                    <h4 class="mb-0">Check Out Item</h4>
+            <div class="card border-0 shadow rounded-4">
+                <div class="card-header bg-white rounded-top-4">
+                    <h4 class="fw-bold mb-0">Check Out Item</h4>
                 </div>
                 <div class="card-body">
-                    <div class="row g-3 align-items-start">
+                    <div class="row g-4 align-items-start">
+                        <!-- Barcode/Scanner Block -->
                         <div class="col-lg-7">
-                            <button type="button" class="btn btn-outline-primary mb-3" id="startScanner">
-                                Start Camera Scanner
+                            <button type="button" class="btn btn-outline-primary rounded-pill mb-3" id="startScanner">
+                                <i class="bi bi-camera"></i> Start Camera Scanner
                             </button>
-                            <button type="button" class="btn btn-outline-secondary mb-3" id="stopScanner" style="display: none;">
-                                Stop Scanner
+                            <button type="button" class="btn btn-outline-secondary rounded-pill mb-3" id="stopScanner" style="display: none;">
+                                <i class="bi bi-x-circle"></i> Stop Scanner
                             </button>
                             <div id="scannerContainer" style="display: none;">
-                                <div id="barcodeScanner" style="width:100%;max-width:500px;height:300px; margin:auto; border:2px solid #007bff; border-radius:8px;"></div>
+                                <div id="barcodeScanner" class="bg-light border border-primary rounded-4 mx-auto" style="width:100%;max-width:500px;height:300px;"></div>
                                 <div class="text-center mt-2">
-                                    <small class="text-muted">Point camera at barcode. Scanning will start automatically.</small>
+                                    <small class="text-muted">Point camera at barcode. Scanning starts automatically.</small>
                                 </div>
                             </div>
                         </div>
+                        <!-- Manual Barcode Input -->
                         <div class="col-lg-5">
-                            <label for="barcodeInput" class="form-label">Or Enter Barcode Manually</label>
+                            <label for="barcodeInput" class="form-label fw-semibold">Or Enter Barcode Manually</label>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control form-control-lg" id="barcodeInput"
-                                       placeholder="Enter barcode ID (e.g., CDM-KB-001)" autocomplete="off" />
-                                <button type="button" class="btn btn-primary input-group-text" onclick="lookupItem()">
+                                <input type="text"
+                                       class="form-control form-control-lg rounded-pill"
+                                       id="barcodeInput"
+                                       placeholder="Enter barcode ID (e.g., CDM-KB-001)"
+                                       autocomplete="off"
+                                       style="text-transform:uppercase"
+                                       oninput="this.value = this.value.toUpperCase();" />
+                                <button type="button" class="btn btn-primary input-group-text rounded-pill" onclick="lookupItem()">
                                     Lookup Item
                                 </button>
                             </div>
                         </div>
                     </div>
-                    <!-- ... rest of your logic/tables/forms unchanged ... -->
+                    <!-- Item Info & Checkout Form -->
+                    <div id="itemBlock" style="display:none;" class="mt-4">
+                        <div class="mb-3">
+                            <strong>Barcode:</strong> <span id="detailBarcode"></span><br />
+                            <strong>Name:</strong> <span id="detailName"></span><br />
+                            <strong>Available Stock:</strong> <span id="detailStock"></span>
+                        </div>
+                        <form method="post" id="checkoutForm">
+                            <input type="hidden" asp-for="ItemId" id="formItemId" />
+                            <div class="mb-3">
+                                <label asp-for="BorrowerId" class="form-label fw-semibold">Borrower *</label>
+                                <select asp-for="BorrowerId" asp-items="Model.Users" class="form-select rounded-pill" required>
+                                    <option value="">-- Select Borrower --</option>
+                                </select>
+                            </div>
+                            <div class="row g-3">
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="Quantity" class="form-label fw-semibold">Quantity *</label>
+                                    <input asp-for="Quantity" class="form-control rounded-pill" id="quantityInput" min="1" value="1" required />
+                                    <small class="form-text text-muted" id="maxQuantityText"></small>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label asp-for="DueDate" class="form-label fw-semibold">Due Date *</label>
+                                    <input asp-for="DueDate" class="form-control rounded-pill" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" required />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Notes" class="form-label fw-semibold">Notes (optional)</label>
+                                <textarea asp-for="Notes" class="form-control rounded-4"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100 rounded-pill py-2 fw-bold">
+                                <i class="bi bi-check2-circle"></i> Confirm Check Out
+                            </button>
+                        </form>
+                    </div>
                     <div id="alertContainer"></div>
                 </div>
             </div>
@@ -56,6 +97,7 @@
         document.getElementById('barcodeInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') { e.preventDefault(); lookupItem(); }
         });
+
         function startScanner() {
             const scannerContainer = document.getElementById('scannerContainer');
             const startBtn = document.getElementById('startScanner');
@@ -73,8 +115,7 @@
                 decoder: { readers: ["code_128_reader", "ean_reader", "upc_reader"] }
             }, function(err) {
                 if (err) {
-                    showAlert('Camera Error: ' + err.name + ' - ' + err.message + '<br><br>' +
-                        'Please check camera permission or HTTPS.', 'danger');
+                    showAlert('Camera Error: ' + err.name + ' - ' + err.message + '<br><br>Check camera permission or HTTPS.', 'danger');
                     stopScanner();
                     return;
                 }
@@ -84,7 +125,7 @@
             Quagga.onDetected(function(result) {
                 if (scannerActive) {
                     const code = result.codeResult.code;
-                    document.getElementById('barcodeInput').value = code;
+                    document.getElementById('barcodeInput').value = code.toUpperCase();
                     lookupItem();
                     stopScanner();
                 }
@@ -103,7 +144,7 @@
             stopBtn.style.display = 'none';
         }
         async function lookupItem() {
-            const barcode = document.getElementById('barcodeInput').value.trim();
+            const barcode = document.getElementById('barcodeInput').value.trim().toUpperCase();
             if (!barcode) {
                 showAlert('Please enter a barcode', 'warning');
                 return;
@@ -115,10 +156,21 @@
                     displayItemDetails(item);
                 } else {
                     showAlert('Item not found. Please check the barcode.', 'danger');
+                    document.getElementById('itemBlock').style.display = 'none';
                 }
             } catch (error) {
                 showAlert('Error looking up item', 'danger');
+                document.getElementById('itemBlock').style.display = 'none';
             }
+        }
+        function displayItemDetails(item) {
+            document.getElementById('itemBlock').style.display = "block";
+            document.getElementById('formItemId').value = item.itemId;
+            document.getElementById('detailBarcode').textContent = item.barcodeId || '-';
+            document.getElementById('detailName').textContent = item.itemName || '-';
+            document.getElementById('detailStock').textContent = item.currentStock ?? '-';
+            document.getElementById('quantityInput').max = item.currentStock;
+            document.getElementById('maxQuantityText').textContent = `Max: ${item.currentStock} available`;
         }
         function showAlert(message, type) {
             const alertContainer = document.getElementById('alertContainer');
@@ -133,4 +185,3 @@
         }
     </script>
 }
-0

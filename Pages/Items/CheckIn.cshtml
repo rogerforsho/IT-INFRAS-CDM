@@ -7,56 +7,101 @@
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <!-- Success/Error Message Notification -->
             @if (!string.IsNullOrEmpty(Model.StatusMessage))
             {
-                <div class="alert @(Model.StatusMessage.Contains("✅") ? "alert-success" : Model.StatusMessage.Contains("❌") ? "alert-danger" : "alert-warning") alert-dismissible fade show" role="alert">
+                <div class="alert @(Model.StatusMessage.Contains("✅") ? "alert-success" : Model.StatusMessage.Contains("❌") ? "alert-danger" : "alert-warning") alert-dismissible fade show rounded-pill" role="alert">
                     <strong>@Model.StatusMessage</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             }
-
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0"><i class="bi bi-box-arrow-in-down"></i> Quick Check In by Barcode</h4>
+            <div class="card border-0 shadow rounded-4">
+                <div class="card-header bg-primary text-white rounded-top-4">
+                    <h4 class="mb-0 fw-bold"><i class="bi bi-box-arrow-in-down"></i> Quick Check In by Barcode</h4>
                 </div>
                 <div class="card-body">
                     <div class="row g-3 align-items-start">
+                        <!-- Camera Block -->
                         <div class="col-lg-7">
-                            <button type="button" class="btn btn-info mb-3" id="toggleCamera">
+                            <button type="button" class="btn btn-info rounded-pill mb-3" id="toggleCamera">
                                 <i class="bi bi-camera"></i> Scan with Camera
                             </button>
-                            <!-- Camera Video Container (Hidden by default) -->
                             <div id="cameraContainer" style="display: none;">
-                                <div class="card bg-dark mb-2">
-                                    <div class="card-body p-2 text-center">
-                                        <div id="video" style="width:100%;max-width:500px;height:300px; margin:auto; border:2px solid #0dcaf0; border-radius:8px;"></div>
-                                    </div>
+                                <div class="bg-dark border border-info rounded-4 mb-2 p-2 text-center">
+                                    <div id="video" style="width:100%;max-width:500px;height:300px; margin:auto;"></div>
                                 </div>
                                 <div class="d-flex justify-content-between align-items-center mb-2">
-                                    <button type="button" class="btn btn-danger btn-sm" id="stopCamera">
+                                    <button type="button" class="btn btn-danger btn-sm rounded-pill" id="stopCamera">
                                         <i class="bi bi-x-circle"></i> Stop Camera
                                     </button>
-                                    <span id="scanStatus" class="ms-3 badge bg-secondary">Ready to scan...</span>
+                                    <span id="scanStatus" class="ms-3 badge bg-secondary rounded-pill px-3">Ready to scan...</span>
                                 </div>
                             </div>
                         </div>
+                        <!-- Manual Barcode Form -->
                         <div class="col-lg-5">
                             <form method="post" asp-page-handler="ByBarcode" id="barcodeForm">
-                                <label for="barcode" class="form-label">Or Enter Barcode Manually</label>
+                                <label for="barcode" class="form-label fw-semibold">Or Enter Barcode Manually</label>
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control form-control-lg" id="barcode"
+                                    <input type="text"
+                                           class="form-control form-control-lg rounded-pill"
+                                           id="barcode"
                                            asp-for="Barcode"
                                            placeholder="e.g., LAP-001, MOUSE-001"
-                                           required autocomplete="off" />
-                                    <button type="submit" class="btn btn-primary input-group-text">
+                                           required
+                                           autocomplete="off"
+                                           style="text-transform:uppercase"
+                                           oninput="this.value = this.value.toUpperCase();" />
+                                    <button type="submit" class="btn btn-primary input-group-text rounded-pill">
                                         <i class="bi bi-search"></i> Search Barcode
                                     </button>
                                 </div>
                             </form>
                         </div>
                     </div>
-                    <!-- ... (rest of your code for results, tables, etc. remains unchanged) ... -->
+
+                    <!-- Table for choosing transactions -->
+                    @if (Model.MatchingTransactions != null && Model.MatchingTransactions.Any())
+                    {
+                        <form method="post" asp-page-handler="ConfirmSelection">
+                            <div class="table-responsive mt-4">
+                                <table class="table table-hover align-middle table-borderless">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th width="60">Select</th>
+                                            <th>Borrower</th>
+                                            <th>Barcode</th>
+                                            <th>Item</th>
+                                            <th>Checked Out</th>
+                                            <th>Due Date</th>
+                                            <th>Quantity</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var transaction in Model.MatchingTransactions)
+                                        {
+                                            <tr>
+                                                <td class="text-center">
+                                                    <input type="radio" name="SelectedTransactionId" value="@transaction.TransactionId" required />
+                                                </td>
+                                                <td>
+                                                    <strong>@transaction.Borrower?.FullName</strong>
+                                                    <br /><small class="text-muted">@transaction.Borrower?.Email</small>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-secondary rounded-pill px-3">@transaction.Item?.BarcodeId</span>
+                                                </td>
+                                                <td>@transaction.Item?.ItemName</td>
+                                                <td>@transaction.TransactionDate.ToString("MMM dd, yyyy")</td>
+                                                <td>@transaction.DueDate.ToString("MMM dd, yyyy")</td>
+                                                <td>@transaction.Quantity</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                            <button type="submit" class="btn btn-success rounded-pill px-4 py-2 fw-bold mt-3">Check In Selected</button>
+                        </form>
+                    }
                 </div>
             </div>
         </div>
@@ -83,19 +128,17 @@
         function startScanner() {
             scannerActive = true;
             document.getElementById('scanStatus').textContent = 'Camera active - Point at barcode...';
-            document.getElementById('scanStatus').className = 'ms-3 badge bg-info';
+            document.getElementById('scanStatus').className = 'ms-3 badge bg-info rounded-pill px-3';
             Quagga.init({
                 inputStream: {
                     name: "Live",
                     type: "LiveStream",
                     target: document.querySelector('#video'),
-                    constraints: {
-                        width: 500, height: 300, facingMode: "environment"
-                    },
+                    constraints: { width: 500, height: 300, facingMode: "environment" }
                 },
                 decoder: {
                     readers: ["code_128_reader","ean_reader","ean_8_reader","code_39_reader",
-                        "code_39_vin_reader","codabar_reader","upc_reader","upc_e_reader","i2of5_reader"]
+                              "code_39_vin_reader","codabar_reader","upc_reader","upc_e_reader","i2of5_reader"]
                 },
             }, function(err) {
                 if (err) {
@@ -110,7 +153,7 @@
                 const code = result.codeResult.code;
                 document.getElementById('barcode').value = code;
                 document.getElementById('scanStatus').textContent = '✅ Scanned: ' + code;
-                document.getElementById('scanStatus').className = 'ms-3 badge bg-success';
+                document.getElementById('scanStatus').className = 'ms-3 badge bg-success rounded-pill px-3';
                 stopScanner();
                 setTimeout(function() {
                     document.getElementById('barcodeForm').submit();
@@ -124,7 +167,7 @@
             btn.innerHTML = '<i class="bi bi-camera"></i> Scan with Camera';
             btn.classList.remove('btn-warning'); btn.classList.add('btn-info');
             document.getElementById('scanStatus').textContent = 'Ready to scan...';
-            document.getElementById('scanStatus').className = 'ms-3 badge bg-secondary';
+            document.getElementById('scanStatus').className = 'ms-3 badge bg-secondary rounded-pill px-3';
         }
         document.getElementById('barcode')?.focus();
         document.getElementById('barcode')?.addEventListener('keypress', function(e) {
